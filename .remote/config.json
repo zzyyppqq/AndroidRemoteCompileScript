@@ -1,0 +1,10 @@
+{
+  "host": "192.168.2.100",
+  "port": "22",
+  "username": "aecg",
+  "password": "123456",
+  "command": "assembleDebug -p app",
+  "root": "~/code",
+  "sdk": "C\\:\\\\Users\\\\aecg\\\\AppData\\\\Local\\\\Android\\\\Sdk",
+  "ndk": ""
+}
