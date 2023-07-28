@@ -2,11 +2,6 @@
 
 ## 准备
 
-### 安装jq（json解析库，主要为解析config.json）
-```shell
-brew install jq
-```
-
 ### 安装sshpass （使用账号、密码登陆远程服务器）
 
 解压.remote/file中的 sshpass-1.08.tar.gz 文件，并进入sshpass-1.08目录，执行以下命令，编译安装sshpass
