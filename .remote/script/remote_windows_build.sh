@@ -33,7 +33,8 @@ buildType=$3
 
 echo "shell params command: $command, moduleName: $moduleName, buildType: $buildType"
 
-if [ buildType = "debug" ]; then
+buildCommand=""
+if [ $buildType == "debug" ]; then
   buildCommand="gradlew assembleDebug -p $moduleName"
 else
   buildCommand="gradlew assembleRelease -p $moduleName"
@@ -84,7 +85,7 @@ function installApk() {
 }
 
 function clean() {
-  sshpass -p $remoteUserPassword ssh -p 22  -o StrictHostKeyChecking=no $remoteUserHost 'cd '$remoteProjectPath'  && gradlew clean'
+  sshpass -p $remoteUserPassword ssh -p 22  -o StrictHostKeyChecking=no $remoteUserHost 'cd '$remoteProjectPath' && gradlew clean'
 }
 
 function syncLocalFileToRemote() {

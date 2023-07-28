@@ -24,13 +24,13 @@ task remoteInstallReleaseAPK(group: "android_remote") {
 
 task remoteClean(group: "android_remote") {
     doLast {
-        executeShell("clean")
+        executeShell("clean", "")
     }
 }
 
 task remoteSyncFile(group: "android_remote") {
     doLast {
-        executeShell("sync")
+        executeShell("sync", "")
     }
 }
 
