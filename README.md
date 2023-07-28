@@ -49,5 +49,5 @@ apply from: '../.remote/gradle/android_remote_compile.gradle'
 - remoteInstallDebugAPK/remoteInstallReleaseAPK （安装已存在在build目录下的apk）
 - remoteSyncFile   （同步本地最新代码到远程服务器上）
 
-[](./imgs/gradle.png)
+[](imgs/gradle.png)
 
