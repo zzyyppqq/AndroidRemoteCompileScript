@@ -14,9 +14,11 @@ make install
 
 ## 使用步骤
 
-### 将.remote文件夹拷贝至任意Android项目的根目录
+### 将.remote文件夹拷贝至任意Android项目的根目录（与setting.gradle同一级）
 
-编辑remote.properties，配置远程服务器信息
+编辑remote.properties，配置远程服务器信息，示例：
+
+*Linux*
 ```properties
 host=192.168.9.65
 port=22
@@ -25,6 +27,17 @@ password=123456
 code=~/code
 sdk.dir=/Users/zyp/Library/Android/sdk
 ndk.dir=/Users/zyp/Library/Android/sdk/ndk-bundle
+```
+
+*Windows*
+```properties
+host=192.168.2.100
+port=22
+username=zyp
+password=123456
+code=~/code
+sdk.dir=C\:\\Users\\zyp\\AppData\\Local\\Android\\Sdk
+ndk.dir=C\:\\Users\\zyp\\AppData\\Local\\Android\\Sdk\\ndk-bundle
 ```
 
 ### 为Android项目的所有android类型的build.gradle添加最后一行添加以下脚本
