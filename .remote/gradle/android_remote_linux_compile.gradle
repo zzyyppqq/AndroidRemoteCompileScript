@@ -1,0 +1,63 @@
+task remoteRunDebugApk(group: "android_remote") {
+    doLast {
+        executeShell("run", "debug")
+    }
+}
+
+task remoteRunReleaseApk(group: "android_remote") {
+    doLast {
+        executeShell("run", "release")
+    }
+}
+
+task remoteInstallDebugAPK(group: "android_remote") {
+    doLast {
+        executeShell("install", "debug")
+    }
+}
+
+task remoteInstallReleaseAPK(group: "android_remote") {
+    doLast {
+        executeShell("install", "release")
+    }
+}
+
+task remoteClean(group: "android_remote") {
+    doLast {
+        executeShell("clean", "")
+    }
+}
+
+task remoteSyncFile(group: "android_remote") {
+    doLast {
+        executeShell("sync", "")
+    }
+}
+
+
+def executeShell(String command, String buildType) {
+    def moduleName = projectDir.name
+    println("projectDir: $projectDir, command: $command, moduleName: $moduleName")
+    def osName = System.getProperty('os.name').toLowerCase(Locale.ROOT)
+    println("osName: $osName")
+    if (osName.contains('mac')) {
+        runCommand("sh", "$projectDir/../.remote/script/remote_linux_build.sh", command, moduleName, buildType)
+    }
+}
+
+def runCommand(String... command) {
+    ProcessBuilder processBuilder = new ProcessBuilder()
+    processBuilder.redirectErrorStream(true)
+    processBuilder.command(command)
+    Process process = processBuilder.start()
+    println("process start")
+    InputStreamReader inputReader = new InputStreamReader(process.getInputStream(), "UTF-8")
+    BufferedReader bufferedReader = new BufferedReader(inputReader)
+    String line
+    while ((line = bufferedReader.readLine()) != null) {
+        println(line)
+    }
+    process.waitFor()
+    process.closeStreams()
+    println("process finish")
+}

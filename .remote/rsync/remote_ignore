@@ -1,6 +1,6 @@
 .lock
 .git/
-.sync/
+.remote/
 Thumbs.db
 ehthumbs.db
 Desktop.ini

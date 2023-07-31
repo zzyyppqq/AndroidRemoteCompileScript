@@ -20,8 +20,8 @@ port=$(awk -F= '/port/{print $2}' $configPath)
 username=$(awk -F= '/username/{print $2}' $configPath)
 password=$(awk -F= '/password/{print $2}' $configPath)
 code=$(awk -F= '/code/{print $2}' $configPath)
-sdk=$(awk -F= '/sdk/{print $2}' $configPath)
-ndk=$(awk -F= '/ndk/{print $2}' $configPath)
+sdk=$(awk -F= '/sdk.dir/{print $2}' $configPath)
+ndk=$(awk -F= '/ndk.dir/{print $2}' $configPath)
 
 echo "host: $host"
 echo "port: $port"
@@ -33,10 +33,6 @@ echo "ndk: $ndk"
 
 usernameHost=${username}@${host}
 
-echo "code start: $code"
-code=$(echo $code | sed 's/~//g' | sed 's/\///g')
-echo "code end: $code"
-
 command=$1
 moduleName=$2
 buildType=$3
@@ -45,9 +41,9 @@ echo "shell params command: $command, moduleName: $moduleName, buildType: $build
 
 buildCommand=""
 if [[ $buildType == "debug" ]]; then
-  buildCommand="gradlew assembleDebug -p $moduleName"
+  buildCommand="./gradlew assembleDebug -p $moduleName"
 else
-  buildCommand="gradlew assembleRelease -p $moduleName"
+  buildCommand="./gradlew assembleRelease -p $moduleName"
 fi
 echo "---- buildCommand ---- "
 echo "$buildCommand"
@@ -69,7 +65,7 @@ project_name
 
 echo "projectName: $projectName"
 
-remoteProjectPath=''${code}'\'${projectName}''
+remoteProjectPath=${code}/${projectName}
 echo "remoteProjectPath: $remoteProjectPath"
 
 remoteProjectDir=${usernameHost}:${remoteProjectPath}
@@ -80,15 +76,15 @@ remote_ignore=$projectDir/.remote/rsync/remote_ignore
 local_ignore=$projectDir/.remote/rsync/local_ignore
 
 function remoteCreateProjectDir() {
-  sshpass -p $password ssh $usernameHost 'if not exist '$remoteProjectPath' (mkdir -p '$remoteProjectPath') else (echo '${projectName} created')'
+  sshpass -p $password ssh $usernameHost 'mkdir -p '$remoteProjectPath''
 }
 
 function remoteConfigSDK() {
-  sshpass -p $password ssh $usernameHost 'cd '$remoteProjectPath' && (echo sdk.dir='$sdk') > local.properties && type local.properties && CACLS local.properties /e /p '$username':F'
+  sshpass -p $password ssh $usernameHost 'cd '$remoteProjectPath' && rm -rf local.properties && (echo sdk.dir='$sdk') > local.properties'
 }
 
 function remoteBuild() {
-  sshpass -p $password ssh -p 22  -o StrictHostKeyChecking=no $usernameHost 'cd '$remoteProjectPath'  && '$buildCommand''
+  sshpass -p $password ssh -p 22  -o StrictHostKeyChecking=no $usernameHost 'cd '$remoteProjectPath' && '$buildCommand''
 }
 
 function installApk() {
@@ -96,7 +92,7 @@ function installApk() {
 }
 
 function clean() {
-  sshpass -p $password ssh -p 22  -o StrictHostKeyChecking=no $usernameHost 'cd '$remoteProjectPath' && gradlew clean'
+  sshpass -p $password ssh -p 22  -o StrictHostKeyChecking=no $usernameHost 'cd '$remoteProjectPath' && ./gradlew clean'
 }
 
 function syncLocalFileToRemote() {
